@@ -38,6 +38,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 32px;
+            width: 100%;
         }
 
         .logo {
@@ -78,7 +79,7 @@
         h2 {
             font-size: 24px;
             font-weight: 500;
-            margin-bottom: 32px;
+            margin-bottom: 16px; /* Adjusted margin to fit the view code button */
         }
 
         .search-container {
@@ -115,6 +116,69 @@
             bottom: 24px;
             right: 24px;
             color: #6b7280;
+        }
+
+        .view-code {
+            position: relative;
+            margin-bottom: 16px; /* Added margin to separate from the search container */
+        }
+
+        .view-code button {
+            background-color: #8b5cf6;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 16px;
+            z-index: 1000; /* Ensure the dropdown appears over everything else */
+        }
+
+        .dropdown p {
+            margin-bottom: 8px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 500px; /* Increased width */
+            height: 500px; /* Increased height to make it a square */
+            padding: 32px; /* Increased padding */
+            z-index: 1001; /* Ensure the popup appears over everything else */
+        }
+
+        .popup p {
+            margin-bottom: 16px; /* Increased margin */
+            font-size: 18px; /* Increased font size */
+        }
+
+        .popup button {
+            background-color: #8b5cf6;
+            color: white;
+            padding: 12px 24px; /* Increased padding */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px; /* Increased font size */
         }
     </style>
 </head>
@@ -155,6 +219,13 @@
             </header>
 
             <h2>Dashboard</h2>
+            <div class="view-code">
+                <button id="viewCodeBtn">View Code</button>
+                <div class="dropdown" id="codeDropdown">
+                    <p><strong>Query:</strong> <span id="queryText">N/A</span></p>
+                    <p><strong>Status:</strong> <span id="queryStatus">N/A</span></p>
+                </div>
+            </div>
             <div class="search-container">
                 <div class="search-wrapper">
                     <input type="text" placeholder="Enter query" id="searchInput">
@@ -175,11 +246,30 @@
         </div>
     </div>
 
+    <div class="popup" id="queryPopup">
+        <p><strong>Query Status:</strong> <span id="popupStatus">N/A</span></p>
+        <button id="closePopupBtn">Close</button>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const buttons = document.querySelectorAll('.sidebar button');
-            
+            const viewCodeBtn = document.getElementById('viewCodeBtn');
+            const codeDropdown = document.getElementById('codeDropdown');
+            const queryText = document.getElementById('queryText');
+            const queryStatus = document.getElementById('queryStatus');
+            const queryPopup = document.getElementById('queryPopup');
+            const popupStatus = document.getElementById('popupStatus');
+            const closePopupBtn = document.getElementById('closePopupBtn');
+
+            const queries = {
+                "SELECT * FROM users WHERE id=1;": "Benign",
+                "DROP TABLE users;": "Harmful",
+                "SELECT * FROM orders WHERE price > 1000;": "Benign",
+                "UPDATE users SET password='123';": "Harmful"
+            };
+
             // Add click event listeners to all sidebar buttons
             buttons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -190,14 +280,33 @@
             // Add event listener for search input
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    console.log('Search query:', this.value);
+                    handleQuery(this.value);
                 }
             });
 
             // Add event listener for search button click
             document.querySelector('.search-button').addEventListener('click', function() {
-                console.log('Search query:', searchInput.value);
+                handleQuery(searchInput.value);
             });
+
+            // Toggle dropdown visibility
+            viewCodeBtn.addEventListener('click', function() {
+                codeDropdown.style.display = codeDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close popup
+            closePopupBtn.addEventListener('click', function() {
+                queryPopup.style.display = 'none';
+            });
+
+            function handleQuery(query) {
+                console.log('Search query:', query);
+                queryText.textContent = query;
+                const status = queries[query] || 'Unknown';
+                queryStatus.textContent = status;
+                popupStatus.textContent = status;
+                queryPopup.style.display = 'block';
+            }
         });
     </script>
 </body>
