@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Shield - API Key Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e5e7eb;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 40px;
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            position: relative;
+            padding: 32px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .logo span {
+            color: #c054e5;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            color: #6b7280;
+            gap: 8px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-right: 32px;
+        }
+
+        .sidebar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .lock-button {
+            margin-top: 96px;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .create-key-section {
+            margin-bottom: 24px;
+        }
+
+        .create-key-section h3 {
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .key-input-wrapper {
+            display: flex;
+            gap: 16px;
+        }
+
+        .key-input {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .create-key-btn {
+            padding: 12px 24px;
+            background-color: #6c5dd3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .view-keys-section h3 {
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            word-wrap: break-word;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e6f4f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <button id="homeBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+            </button>
+            <button id="searchBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </button>
+            <button id="menuBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <button id="screenBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+            </button>
+            
+        </nav>
+        <main>
+            <header>
+                <h1 class="logo"><span>Hacking</span> Shield</h1>
+                <div class="user-profile">
+                    User Profile
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+            </header>
+
+            <div class="main-header">
+                <h2>Manage API Keys</h2>
+                <button class="download-btn">
+                    Download CSV
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                </button>
+            </div>
+
+            <section class="create-key-section">
+                <h3>Create New API Key</h3>
+                <div class="key-input-wrapper">
+                    <div class="key-input">
+                        <input type="text" placeholder="Enter API key name">
+                    </div>
+                    <button class="create-key-btn">Create key</button>
+                </div>
+            </section>
+
+            <section class="view-keys-section">
+                <h3>View Keys</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>API Key Name</th>
+                            <th>API Key</th>
+                            <th>Date Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Key 1</td>
+                            <td>oc334567</td>
+                            <td>08/10/2024</td>
+                        </tr>
+                        <tr>
+                            <td>Key 2</td>
+                            <td>oc398748</td>
+                            <td>08/10/2024</td>
+                        </tr>
+                        <tr>
+                            <td>Key 3</td>
+                            <td>oc357987</td>
+                            <td>08/10/2024</td>
+                        </tr>
+                        <tr>
+                            <td>Key 4</td>
+                            <td>oc353353</td>
+                            <td>08/10/2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const createKeyBtn = document.querySelector('.create-key-btn');
+            const keyInput = document.querySelector('.key-input input');
+            const downloadBtn = document.querySelector('.download-btn');
+            
+            createKeyBtn.addEventListener('click', function() {
+                const keyName = keyInput.value.trim();
+                if (keyName) {
+                    console.log('Creating new API key:', keyName);
+                    keyInput.value = '';
+                }
+            });
+
+            downloadBtn.addEventListener('click', function() {
+                console.log('Downloading CSV...');
+            });
+
+            const buttons = document.querySelectorAll('.sidebar button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log(this.id + ' clicked');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

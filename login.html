@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport content is not safe and I can't generate an answer for your request . Please provide more information about the content.">
+    <title>Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e5e7eb;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 40px;
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            position: relative;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .logo span {
+            color: #c054e5;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        input {
+            padding: 16px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #c054e5;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #a53ea5;
+        }
+
+        .forgot-password {
+            color: #6b7280;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .forgot-password a {
+            color: #c054e5;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="logo"><span>Hacking</span> Shield</h1>
+        <form>
+            <input type="email" placeholder="Email" id="email" required>
+            <input type="password" placeholder="Password" id="password" required>
+            <input type="submit" value="Login">
+        </form>
+        <div class="forgot-password">
+            <a href="#">Forgot Password?</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                // TO DO: Implement login functionality
+                console.log('Login attempt with email:', email, 'and password:', password);
+            });
+        });
+    </script>
+</body>
+</html>
