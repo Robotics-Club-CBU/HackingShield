@@ -99,6 +99,77 @@
         button:hover {
             background-color: #7c3aed;
         }
+
+        /* Success Popup Styles */
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .success-popup.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .success-container {
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 300px;
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+
+        .success-popup.show .success-container {
+            transform: scale(1);
+        }
+
+        .success-header {
+            background-color: #d1a4fc;
+            height: 50px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            margin: -40px -40px 20px -40px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+            color: #d1a4fc;
+        }
+
+        .success-title {
+            font-size: 24px;
+            color: #d1a4fc;
+            margin: 20px 0;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .success-button {
+            background-color: #5a00e0;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -113,7 +184,7 @@
             <input type="email" placeholder="Email" id="email" required>
             <div class="password-input">
                 <input type="password" placeholder="Password" id="password" required>
-                <span class="eye-icon">👁️</span>
+                <span class="eye-icon" onclick="togglePassword()">👁️</span>
             </div>
             <input type="password" placeholder="Confirm Password" id="confirmPassword" required>
             <button type="submit">Sign Up</button>
@@ -121,21 +192,42 @@
         <p style="margin-top: 16px;">Already have an account? <a href="login.html">Log in</a></p>
     </div>
 
+    <!-- Success Popup -->
+    <div class="success-popup" id="successPopup">
+        <div class="success-container">
+            <div class="success-header"></div>
+            <div class="success-icon">✔️</div>
+            <div class="success-title">Success!</div>
+            <div class="success-message">Your account has been created.</div>
+            <a href="#" class="success-button" onclick="closePopup()">Continue</a>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('signupForm');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirmPassword');
-            const eyeIcon = document.querySelector('.eye-icon');
+            const successPopup = document.getElementById('successPopup');
 
-            eyeIcon.addEventListener('click', function() {
+            function togglePassword() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
-            });
+            }
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
+                // Check if all input fields are filled
+                const inputs = form.querySelectorAll('input');
+                for (let input of inputs) {
+                    if (!input.value) {
+                        alert('Please fill in all fields.');
+                        return;
+                    }
+                }
+
+                // Check if passwords match
                 if (passwordInput.value !== confirmPasswordInput.value) {
                     alert("Passwords do not match!");
                     return;
@@ -150,8 +242,16 @@
 
                 // TO DO: Implement signup functionality
                 console.log('Sign up attempt with data:', formData);
+
+                // Show success popup
+                successPopup.classList.add('show');
             });
         });
+
+        function closePopup() {
+            const successPopup = document.getElementById('successPopup');
+            successPopup.classList.remove('show');
+        }
     </script>
 </body>
 </html>
